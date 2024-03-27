@@ -7,13 +7,9 @@ pub mod pda_account {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        let pda_account = &mut ctx.accounts.pda_account;
-        pda_account.user = *ctx.accounts.user.key;
-        pda_account.bump = ctx.bumps.pda_account;
-
-        msg!("Initialized PDA account for user: {:?}", pda_account.user);
-        msg!("Bump seed: {:?}", pda_account.bump);
-
+        let account_data = &mut ctx.accounts.pda_account;
+        account_data.user = *ctx.accounts.user.key;
+        account_data.bump = ctx.bumps.pda_account;
         Ok(())
     }
 }
@@ -25,7 +21,7 @@ pub struct Initialize<'info> {
 
     #[account(
         init,
-        seeds = [b"user", user.key().as_ref()], 
+        seeds = [b"data", user.key().as_ref()], 
         bump,                                  
         payer = user,
         space = 8 + DataAccount::INIT_SPACE
